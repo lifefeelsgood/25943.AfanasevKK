@@ -1,17 +1,15 @@
-# Скомпилированные программы
-main
-ex_time
-ex_time_solaris
-a.out
 *.exe
+*.out
+*.app
 
-# Объектные файлы и библиотеки
 *.o
 *.obj
 *.a
+*.lib
 *.so
+*.dll
+*.dylib
 
-*.txt
-
-# Настройки редактора
-.vscode/
+/bin/
+/build/
+/out/
