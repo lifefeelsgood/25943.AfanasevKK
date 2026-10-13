@@ -120,8 +120,16 @@ int main(int argc, char *argv[]) {
       return 0;
     }
 
-    if (rc != 1)
+    if (rc == EOF)
       break;
+
+    if (rc != 1) {
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF)
+        ;
+      printf("Ошибка: Введите число!\n");
+      continue;
+    }
 
     if (target_line == 0) {
       printf("Выход из программы.\n");
