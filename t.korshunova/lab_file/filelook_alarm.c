@@ -23,6 +23,7 @@ void on_alarm(int sig)
         lseek(fd, offsets[i], SEEK_SET);
         n = read(fd, buf, lengths[i]);
         buf[n] = '\0';
+        printf("Length: %d\n", lengths[i]);
         printf("%s\n", buf);
     }
     close(fd);
@@ -33,7 +34,8 @@ int main(int argc, char *argv[])
 {
     long pos = 0;
     char c;
-    int i, num;
+    int i, num, ret;
+    int first_input = 1;   /* флаг: первый ли это запрос номера */
     char buf[1024];
 
     if (argc < 2) {
@@ -67,14 +69,31 @@ int main(int argc, char *argv[])
     signal(SIGALRM, on_alarm);
 
     while (1) {
-        alarm(5);
+        if (first_input) {
+            alarm(5);
+        }
+
         printf("\nEnter line number (0 to quit): ");
         fflush(stdout);
-        if (scanf("%d", &num) != 1)
-            break;
-        alarm(0);
+
+        ret = scanf("%d", &num);
+
+        if (first_input) {
+            alarm(0);          /* отключаем таймер навсегда */
+            first_input = 0;
+        }
+
+        if (ret != 1) {
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+                ;
+            printf("Please enter a number.\n");
+            continue;
+        }
+
         if (num == 0)
             break;
+
         if (num < 1 || num > nlines) {
             printf("No such line\n");
             continue;
@@ -83,6 +102,7 @@ int main(int argc, char *argv[])
         lseek(fd, offsets[num - 1], SEEK_SET);
         int n = read(fd, buf, lengths[num - 1]);
         buf[n] = '\0';
+        printf("Length: %d\n", lengths[num - 1]);
         printf("%s\n", buf);
     }
 

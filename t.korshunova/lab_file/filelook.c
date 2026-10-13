@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     int nlines = 0;
     long pos = 0;
     char c;
-    int i, num;
+    int i, num, ret;
     char buf[1024];
 
     if (argc < 2) {
@@ -53,10 +53,20 @@ int main(int argc, char *argv[])
     while (1) {
         printf("\nEnter line number (0 to quit): ");
         fflush(stdout);
-        if (scanf("%d", &num) != 1)
-            break;
+
+        ret = scanf("%d", &num);
+        if (ret != 1) {
+            /* очистить поток ввода от мусора */
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+                ;
+            printf("Please enter a number.\n");
+            continue;
+        }
+
         if (num == 0)
             break;
+
         if (num < 1 || num > nlines) {
             printf("No such line\n");
             continue;
@@ -65,9 +75,11 @@ int main(int argc, char *argv[])
         lseek(fd, offsets[num - 1], SEEK_SET);
         int n = read(fd, buf, lengths[num - 1]);
         buf[n] = '\0';
+        printf("Length: %d\n", lengths[num - 1]);
         printf("%s\n", buf);
     }
 
     close(fd);
     return 0;
 }
+
