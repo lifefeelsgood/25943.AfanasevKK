@@ -75,17 +75,17 @@ int main(int argc, char *argv[]) {
     }
 
     case 'U': {
-      struct rlimit rl;
-      if (getrlimit(RLIMIT_NOFILE, &rl) == -1) {
-        perror("Ошибка в getrlimit(RLIMIT_NOFILE)");
+      char *end;
+      errno = 0;
+      long val = strtol(arg, &end, 10);
+      if (errno != 0 || *end != '\0' || val < 0) {
+        fprintf(stderr, "Некорректное значение ulimit: %s\n", arg);
+        break;
+      }
+      if (ulimit(UL_SETFSIZE, val) == -1) {
+        perror("Ошибка в ulimit(UL_SETFSIZE)");
       } else {
-        rl.rlim_cur = (rlim_t)atol(arg);
-        if (setrlimit(RLIMIT_NOFILE, &rl) == -1) {
-          perror("Ошибка в setrlimit(RLIMIT_NOFILE)");
-        } else {
-          printf("Новый лимит процессов установлен: %llu\n",
-                 (unsigned long long)rl.rlim_cur);
-        }
+        printf("Новое значение ulimit установлено: %ld\n", val);
       }
       break;
     }

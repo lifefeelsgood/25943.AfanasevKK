@@ -75,8 +75,16 @@ int main(int argc, char *argv[]) {
   int target_line;
   while (1) {
     printf("\nВведите номер строки (1-%d, или 0 для выхода): ", line_count);
-    if (scanf("%d", &target_line) != 1) {
+    int rc = scanf("%d", &target_line);
+    if (rc == EOF) {
       break;
+    }
+    if (rc != 1) {
+      int c;
+      while ((c = getchar()) != '\n' && c != EOF)
+        ;
+      printf("Ошибка: Введите число!\n");
+      continue;
     }
 
     if (target_line == 0) {
