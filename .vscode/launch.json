@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/VSCc/25943/s.kuzub",
-      "program": "c:/VSCc/25943/s.kuzub/build/Debug/outDebug",
+      "cwd": "c:/VSCc/OC/25943/s.kuzub/task6",
+      "program": "c:/VSCc/OC/25943/s.kuzub/task6/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

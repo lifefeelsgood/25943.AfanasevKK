@@ -66,22 +66,16 @@ int main(int argc, char *argv[]) {
     }
 
     case 'u': {
-      struct rlimit rl;
-      /* На Solaris используем системную константу RLIMIT_MAXPROC */
-      if (getrlimit(RLIMIT_NOFILE, &rl) == -1) {
-        perror("Ошибка в getrlimit(RLIMIT_NOFILE)");
-      } else {
-        if (rl.rlim_cur == RLIM_INFINITY)
-          printf("Макс. процессов: unlimited\n");
-        else
-          printf("Макс. процессов: %llu\n", (unsigned long long)rl.rlim_cur);
-      }
+      long n = sysconf(_SC_CHILD_MAX);
+      if (n == -1)
+        printf("Макс. процессов: unlimited\n");
+      else
+        printf("Макс. процессов: %ld\n", n);
       break;
     }
 
     case 'U': {
       struct rlimit rl;
-      /* На Solaris используем системную константу RLIMIT_MAXPROC */
       if (getrlimit(RLIMIT_NOFILE, &rl) == -1) {
         perror("Ошибка в getrlimit(RLIMIT_NOFILE)");
       } else {
