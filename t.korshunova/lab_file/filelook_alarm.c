@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     long pos = 0;
     char c;
     int i, num, ret;
-    int first_input = 1;   /* флаг: первый ли это запрос номера */
+    int first_input = 1;
     char buf[1024];
 
     if (argc < 2) {
@@ -65,6 +65,9 @@ int main(int argc, char *argv[])
     }
 
     printf("Built table: %d lines\n", nlines);
+    for (i = 0; i < nlines; i++) {
+        printf("Line %d: offset=%ld length=%d\n", i + 1, offsets[i], lengths[i]);
+    }
 
     signal(SIGALRM, on_alarm);
 
@@ -79,7 +82,7 @@ int main(int argc, char *argv[])
         ret = scanf("%d", &num);
 
         if (first_input) {
-            alarm(0);          /* отключаем таймер навсегда */
+            alarm(0);
             first_input = 0;
         }
 
